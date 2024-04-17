@@ -1,6 +1,7 @@
 import { error } from "console";
 import User from '../models/user.model.js';
 import bcrypt from "bcryptjs";
+import RSA from "../models/rsapr.model.js";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
 import { generateRSAKeyPair } from "../cryptservice/rsakeygen.js";
 export const signup = async(req,res) => {
@@ -37,6 +38,12 @@ export const signup = async(req,res) => {
        if(newUser){
        generateTokenAndSetCookie(newUser._id,res);
        await newUser.save();
+       //saving the RSA keys at here:
+       const newRSA = new RSA({
+        userId:newUser._id,
+        rsaPri:privateKey,
+      });
+       await newRSA.save();
        res.status(201).json({
           _id: newUser._id,
           fullName: newUser.fullName,
