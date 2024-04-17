@@ -2,6 +2,7 @@ import { error } from "console";
 import User from '../models/user.model.js';
 import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
+import { generateRSAKeyPair } from "../cryptservice/rsakeygen.js";
 export const signup = async(req,res) => {
     // res.send("Hello");
     // console.log("signupUser");
@@ -20,12 +21,17 @@ export const signup = async(req,res) => {
        const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`
        const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`
 
+          ///cryptography parts
+          const { privateKey, publicKey } = generateRSAKeyPair();
+
+
        const newUser = new User({
         fullName,
         username,
         password :hashedPassword,
         gender,
-        profilePic: gender === "male" ? boyProfilePic : girlProfilePic
+        profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
+        rsaPub:publicKey,
        });
        //lets make more secure here
        if(newUser){
@@ -37,7 +43,7 @@ export const signup = async(req,res) => {
           username: newUser.username,
           password: newUser.password,
           gender: newUser.gender,
-          profilePic: newUser.profilePic
+          profilePic: newUser.profilePic,
        });}
        else{
         res.status(400).json({error:"Invalid User Data"});

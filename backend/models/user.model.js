@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
             type:String,
             default:""
         },
+        rsaPub:{
+            type:String,
+            required:true
+        },
 },//show created at ,updated at =.member since =>created At
 {timestamps:true});
 
