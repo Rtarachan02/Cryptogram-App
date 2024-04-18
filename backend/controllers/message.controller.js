@@ -1,6 +1,10 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
+import User from "../models/user.model.js";
+import EncAES from "../models/enc_aes.model.js";
 import { getReceiverSocketId ,io} from "../socket/socket.js";
+import crypto from 'crypto';
+import encryptAESKeyWithRSA from "../cryptservice/encryptaes.js";
 export const sendMessage = async(req,resp) => {
     // console.log("Message Sent!",req.params.id)
     try {
@@ -11,11 +15,28 @@ export const sendMessage = async(req,resp) => {
       let conversation =  await Conversation.findOne({
             participants: {$all:[senderId,receiverId]},
         });
-        if(!conversation)
+        if(!conversation || !conversation.messages)
           {
             conversation = await Conversation.create({
                 participants: [senderId,receiverId]
-            });
+                });
+         //cryptography part will be going at here:
+         const recipent = await User.findOne({_id:receiverId});
+         const aesKey = crypto.randomBytes(32);
+         const senderEnc = encryptAESKeyWithRSA(aesKey,recipent.rsaPub);
+         const receiverEnc=encryptAESKeyWithRSA(aesKey,req.user.rsaPub);
+        
+         const newEncAES = new EncAES({
+              senderId,
+              receiverId,
+              senderEnc,
+              receiverEnc,
+               });
+               try {
+                await newEncAES.save();
+               } catch (error) {
+                console.log("Error",error.message);
+               }
           }
     const newMessage = new Message({
              senderId,
