@@ -22,6 +22,7 @@ const useDecrAES = () => {
                   console.log("Decrypted AES Key:", keydataAES);
               } catch (error) {
                   toast.error(error.message);
+                  console.log("Error fetching decrypted AES key:", error);
               } finally {
                   setLoading(false);
               }
@@ -29,7 +30,7 @@ const useDecrAES = () => {
 
           fetchDecrAES();
       } else {
-          setKey(null);
+          setDecryptedAESKey(null);
           setLoading(false);
       }
   }, [selectedConversation._id]);

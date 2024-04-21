@@ -27,6 +27,7 @@ const useDecryptMessage = (encmessage) => {
                 }
             } catch (error) {
                 toast.error(error.message);
+                console.log("Error decrypting message:", error);
             } finally {
                 setLoading(false);
             }
