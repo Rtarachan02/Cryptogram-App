@@ -1,5 +1,6 @@
 import crypto from 'crypto'
 function encryptAESKeyWithRSA(aesKey, rsaPublicKey) {
+ try {
   const receiverPubKey = crypto.createPublicKey(rsaPublicKey);
   const encryptedAESKey = crypto.publicEncrypt(
     {
@@ -9,6 +10,9 @@ function encryptAESKeyWithRSA(aesKey, rsaPublicKey) {
     Buffer.from(aesKey)
   );
   return encryptedAESKey;
+ } catch (error) {
+     console.error("Error encrypting AES key:", error);
+ }
 }
 
 export default encryptAESKeyWithRSA;
