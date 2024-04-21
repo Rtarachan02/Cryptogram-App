@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 function encryptMessageWithAESKey(message, aesKey) {
-    try {
+    try { 
         // Convert the AES key and message to buffers
         const aesKeyBuffer = Buffer.from(aesKey, 'hex');
         const messageBuffer = Buffer.from(message, 'utf8');

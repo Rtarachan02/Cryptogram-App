@@ -8,7 +8,7 @@ function decryptAESKeyWithRSA(encryptedAESKey, rsaPrivateKey) {
         const decryptedAESKey = crypto.privateDecrypt(
             {
                 key: privateKey,
-                padding: crypto.constants.RSA_PKCS1_PADDING
+                padding: crypto.constants.RSA_PKCS1_OAEP_PADDING
             },
             encryptedData
 

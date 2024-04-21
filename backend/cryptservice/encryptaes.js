@@ -5,7 +5,7 @@ function encryptAESKeyWithRSA(aesKey, rsaPublicKey) {
   const encryptedAESKey = crypto.publicEncrypt(
     {
       key: receiverPubKey,
-      padding: crypto.constants.RSA_PKCS1_PADDING
+      padding: crypto.constants.RSA_PKCS1_OAEP_PADDING
     },
     Buffer.from(aesKey)
   );
